@@ -1,0 +1,13 @@
+[build]
+  command = "echo 'No build command needed'"
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/support-bar-modern.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/supporters-admin.html"
+  status = 200

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شريط الداعمين - التصميم العصري</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: transparent;
+            color: white;
+            direction: rtl;
+            overflow: hidden;
+        }
+        
+        .support-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            max-width: 1920px;
+            max-height: 1080px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 350px;
+            align-self: center;
+        }
+        
+        .supporters-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 0 20px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            padding-right: 25px;
+            scrollbar-width: thin;
+        }
+        
+        .supporters-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .supporters-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        .supporters-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #8e2de2, #00b09b);
+            border-radius: 4px;
+        }
+        
+        .supporter {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            animation: fadeInModern 0.4s ease-out;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            width: 350px;
+            align-self: center;
+        }
+        
+        .supporter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #8e2de2, #00b09b);
+        }
+        
+        .supporter:hover {
+            background: rgba(0, 0, 0, 0.7);
+            transform: translateX(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        @keyframes fadeInModern {
+            from { 
+                opacity: 0; 
+                transform: translateX(-40px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0);
+            }
+        }
+        
+        .supporter-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8e2de2, #4a00e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 20px;
+            font-weight: bold;
+            font-size: 26px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .supporter-info {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .supporter-name {
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 20px;
+            letter-spacing: 0.5px;
+        }
+        
+        .support-message {
+            font-size: 16px;
+            color: #ccc;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .support-amount {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .amount-value {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="support-container">
+        <div class="header">
+            <h2>داعمو البث المباشر</h2>
+        </div>
+        <div class="supporters-list" id="supportersList">
+            <!-- سيتم إضافة الداعمين هنا ديناميكيًا -->
+        </div>
+    </div>
+
+    <script src="support-data.js"></script>
+    <script>
+        let currentSupporters = [];
+        let firstLoad = true;
+        
+        // تحديث شريط الداعمين عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSupportersList();
+        });
+        
+        // تحديث قائمة الداعمين
+        function updateSupportersList() {
+            const supporters = window.supportersApp.getSupporters();
+            const listElement = document.getElementById('supportersList');
+            
+            if (!listElement) return;
+            
+            // عند التحميل الأول، نعرض الداعمين بدون تأثيرات
+            if (firstLoad) {
+                listElement.innerHTML = '';
+                
+                supporters.forEach(supporter => {
+                    const supporterElement = document.createElement('div');
+                    supporterElement.className = 'supporter';
+                    supporterElement.innerHTML = `
+                        <div class="supporter-avatar">${supporter.avatar}</div>
+                        <div class="supporter-info">
+                            <div class="supporter-name">${supporter.name}</div>
+                            <div class="support-message">${supporter.message || 'شكراً لدعمكم الكريم'}</div>
+                        </div>
+                        <div class="support-amount">
+                            <span class="amount-value">$${supporter.amount}</span>
+                        </div>
+                    `;
+                    listElement.appendChild(supporterElement);
+                });
+                
+                currentSupporters = supporters.map(s => s.id);
+                firstLoad = false;
+                return;
+            }
+            
+            // التحقق من وجود داعمين جدد
+            const newSupporters = supporters.filter(s => !currentSupporters.includes(s.id));
+            
+            // إذا كان هناك داعمون جدد، نضيفهم مع تأثير
+            if (newSupporters.length > 0) {
+                newSupporters.forEach(supporter => {
+                    const supporterElement = document.createElement('div');
+                    supporterElement.className = 'supporter new';
+                    supporterElement.innerHTML = `
+                        <div class="supporter-avatar">${supporter.avatar}</div>
+                        <div class="supporter-info">
+                            <div class="supporter-name">${supporter.name}</div>
+                            <div class="support-message">${supporter.message || 'شكراً لدعمكم الكريم'}</div>
+                        </div>
+                        <div class="support-amount">
+                            <span class="amount-value">$${supporter.amount}</span>
+                        </div>
+                    `;
+                    listElement.insertBefore(supporterElement, listElement.firstChild);
+                });
+                
+                // تحديث قائمة المعرفات الحالية
+                currentSupporters = supporters.map(s => s.id);
+                
+                // الحفاظ على عدد الداعمين المعروض
+                while (listElement.children.length > 20) {
+                    listElement.removeChild(listElement.lastChild);
+                }
+            }
+        }
+        
+        // مراقبة التحديثات الجديدة بتردد أقل
+        setInterval(() => {
+            updateSupportersList();
+        }, 10000); // تحديث كل 10 ثواني بدلاً من 5
+        
+        // الاستماع إلى رسائل من صفحة الإدارة
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'updateSupportBar') {
+                updateSupportersList();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "supporters-bar-stream",
+  "version": "1.0.0",
+  "description": "A modern supporters bar for live streaming integration with OBS",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "build": "echo \"No build required\""
+  },
+  "keywords": [
+    "streaming",
+    "obs",
+    "supporters",
+    "live-stream",
+    "overlay"
+  ],
+  "author": "Supporters Bar Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
